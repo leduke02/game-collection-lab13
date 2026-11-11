@@ -92,8 +92,16 @@ pub fn load_pattern(choice: u32) -> Grid {
 }
 
 // Number of live cells.
-pub fn population(_grid: &Grid) -> usize {
-    todo!("Implement population")
+pub fn population(grid: &Grid) -> usize {
+    let mut count = 0;
+    for row in grid.iter() {
+        for &cell in row.iter() {
+            if cell {
+                count += 1;
+            }
+        }
+    }
+    count
 }
 
 // TODO: replace this Week 12 version. New play(): show the pattern menu (1 blinker,
