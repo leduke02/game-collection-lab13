@@ -62,8 +62,15 @@ pub fn print_neighbor_counts(grid: &Grid) {
 
 // The next generation. Read from `grid` and write to a NEW grid, so a cell is never
 // judged using neighbors that have already been updated.
-pub fn next_generation(_grid: &Grid) -> Grid {
-    todo!("Implement next_generation")
+pub fn next_generation(grid: &Grid) -> Grid {
+    let mut next = new_grid();
+    for row in 0..ROWS {
+        for col in 0..COLS {
+            let n = count_neighbors(grid, row, col);
+            next[row][col] = next_state(grid[row][col], n);
+        }
+    }
+    next
 }
 
 // Preset patterns placed near the middle of the grid (the glider starts near the
