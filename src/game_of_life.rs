@@ -35,7 +35,12 @@ pub fn count_neighbors(grid: &Grid, row: usize, col: usize) -> u8 {
             }
             let r = row as i32 + dr;
             let c = col as i32 + dc;
-            if r >= 0 && r < ROWS as i32 && c >= 0 && c < COLS as i32 && grid[r as usize][c as usize] {
+            if r >= 0
+                && r < ROWS as i32
+                && c >= 0
+                && c < COLS as i32
+                && grid[r as usize][c as usize]
+            {
                 count += 1;
             }
         }
@@ -81,9 +86,9 @@ pub fn next_generation(grid: &Grid) -> Grid {
 pub fn load_pattern(choice: u32) -> Grid {
     let mut grid = new_grid();
     let cells: &[(usize, usize)] = match choice {
-        1 => &[(4, 9), (4, 10), (4, 11)],                  // blinker
-        2 => &[(4, 10), (4, 11), (5, 10), (5, 11)],        // block
-        _ => &[(1, 2), (2, 3), (3, 1), (3, 2), (3, 3)],    // glider (any other number)
+        1 => &[(4, 9), (4, 10), (4, 11)],               // blinker
+        2 => &[(4, 10), (4, 11), (5, 10), (5, 11)],     // block
+        _ => &[(1, 2), (2, 3), (3, 1), (3, 2), (3, 3)], // glider (any other number)
     };
     for &(r, c) in cells {
         grid[r][c] = true;
@@ -190,5 +195,12 @@ mod tests {
         }
         assert_eq!(population(&grid), 5);
         assert_eq!(grid, grid_from(&[(2, 3), (3, 4), (4, 2), (4, 3), (4, 4)]));
+    }
+
+    #[test]
+    fn vertical_line_on_right_edge_becomes_two_cells_without_wrapping() {
+        // Catches a next_generation that wraps at the edge (it would also birth (5, 0)).
+        let grid = grid_from(&[(4, 19), (5, 19), (6, 19)]);
+        assert_eq!(next_generation(&grid), grid_from(&[(5, 18), (5, 19)]));
     }
 }
